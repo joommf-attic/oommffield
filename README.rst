@@ -7,6 +7,6 @@
   :align: right
 
 A Python package for analysing and manipulating
-OOMMF vector field files.
+OOMMF vector field files (omf, ohf).
 
 Authors: Marijan Beg, Ryan Pepper, Hans Fangohr
