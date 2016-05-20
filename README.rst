@@ -2,6 +2,9 @@
   :target: https://travis-ci.org/joommf/oommffield
   :align: left
 
+.. image:: https://codecov.io/gh/joommf/oommffield/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/joommf/oommffield
+
 A Python package for analysing and manipulating
 OOMMF vector field files (omf, ohf).
 
