@@ -1,9 +1,9 @@
-.. image:: https://travis-ci.org/mb1a15/oommffield.svg?branch=master
-  :target: https://travis-ci.org/mb1a15/oommffield
+.. image:: https://travis-ci.org/joommf/oommffield.svg?branch=master
+  :target: https://travis-ci.org/joommf/oommffield
   :align: left
 
-.. image:: https://codecov.io/gh/mb1a15/oommffield/branch/master/graph/badge.svg
-  :target: https://codecov.io/gh/mb1a15/oommffield
+.. image:: https://codecov.io/gh/joommf/oommffield/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/joommf/oommffield
   :align: right
 
 A Python package for analysing and manipulating
