@@ -14,3 +14,5 @@ install: pip install codecov pytest-cov matplotlib
 script: py.test --cov=oommffield --cov-config .coveragerc
 after_success:
   codecov
+notifications:
+  slack: joommf:eqKxGPXuUP3LxnOfxg7GWgDF
