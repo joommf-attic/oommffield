@@ -9,9 +9,11 @@ before_script:
 - "sh -e /etc/init.d/xvfb start"
 - sleep 3 # give xvfb some time to start
 # Install any dependencies for running the tests:
-install: pip install codecov pytest-cov matplotlib
+install: pip install codecov pytest-cov matplotlib git+https://github.com/computationalmodelling/nbval.git
 # command to run tests
-script: py.test --cov=oommffield --cov-config .coveragerc
+script:
+  py.test --cov=oommffield --cov-config .coveragerc
+  py.test --nbval docs/ipynb/*.ipynb
 after_success:
   codecov
 notifications:
