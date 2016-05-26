@@ -12,8 +12,8 @@ before_script:
 install: pip install codecov pytest-cov matplotlib jupyter git+https://github.com/computationalmodelling/nbval.git
 # command to run tests
 script:
-  py.test --cov=oommffield --cov-config .coveragerc
-  py.test --nbval docs/ipynb/*.ipynb
+  - py.test --cov=oommffield --cov-config .coveragerc
+  - py.test --nbval docs/ipynb/*.ipynb
 after_success:
   codecov
 notifications:
