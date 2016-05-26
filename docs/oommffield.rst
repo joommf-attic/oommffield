@@ -1,5 +1,5 @@
-oommfield
-=========
+oommffield
+==========
 
 .. automodule:: oommffield
    :members:
