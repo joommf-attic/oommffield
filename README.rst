@@ -7,7 +7,7 @@
   :align: right
 
 .. image:: https://readthedocs.org/projects/oommffield/badge/?version=latest
-  :target: http://oommfodt.readthedocs.io/en/latest/?badge=latest
+  :target: http://oommffield.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
 
 A Python package for analysing and manipulating
