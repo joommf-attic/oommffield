@@ -6,6 +6,10 @@
   :target: https://codecov.io/gh/joommf/oommffield
   :align: right
 
+.. image:: https://readthedocs.org/projects/oommffield/badge/?version=latest
+  :target: http://oommfodt.readthedocs.io/en/latest/?badge=latest
+  :alt: Documentation Status
+
 A Python package for analysing and manipulating
 OOMMF vector field files (omf, ohf).
 
