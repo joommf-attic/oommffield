@@ -216,7 +216,7 @@ class OOMMFField(object):
 
         return axis1_coords, axis2_coords, field_slice, coord_system
 
-    def plot_slice(self, axis, point, xsize=10):
+    def plot_slice(self, axis, point, xsize=10, axes=True, grid=True):
         """Plot the OOMMFField slice, perpendicular to axis,
         at coordinate point."""
         a1, a2, field_slice, coord_system = self.slice_field(axis, point)
@@ -235,10 +235,14 @@ class OOMMFField(object):
                           self.cmax[coord_system[0]]])
                 plt.ylim([self.cmin[coord_system[1]],
                           self.cmax[coord_system[1]]])
-                plt.xlabel('xyz'[coord_system[0]] + ' (m)')
-                plt.ylabel('xyz'[coord_system[1]] + ' (m)')
-                plt.title('xyz'[coord_system[2]] + ' slice')
-                plt.grid()
+                if axes:
+                    plt.xlabel('xyz'[coord_system[0]] + ' (m)')
+                    plt.ylabel('xyz'[coord_system[1]] + ' (m)')
+                    plt.title('xyz'[coord_system[2]] + ' slice')
+                if not axes:
+                    plt.axis('off')
+                if grid:
+                    plt.grid()
 
         return fig
 
