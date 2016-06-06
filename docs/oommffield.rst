@@ -1,8 +1,10 @@
-oommffield
+OOMMFField
 ==========
 
 .. automodule:: oommffield
-   :members:
 
 .. autoclass:: OOMMFField
    :members:
+   
+   .. automethod:: __init__
+   .. automethod:: __call__
