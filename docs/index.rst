@@ -6,6 +6,22 @@
 Welcome to oommffield's documentation!
 ======================================
 
+This module is a Python package that provides:
+
+- Opening OOMMF vector field files (.omf and .ohf)
+- Analysing vector fields, such as sampling, averaging, plotting, etc.
+- Saving arbitrary vector fields to OOMMF vector field files.
+
+oommffield is a member of JOOMMF_ project - a part of OpenDreamKit_
+Horizon 2020 European Research Infrastructure project
+
+.. _JOOMMF:
+  http://joommf.github.io
+ 
+.. _OpenDreamKit:
+  http://opendreamkit.org/
+
+
 Contents:
 
 .. toctree::
