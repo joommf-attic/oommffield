@@ -139,7 +139,7 @@ class OOMMFField(object):
 
     def __call__(self, c):
         """Sample the field at coordinate c.
-        
+
         Args:
           c (tuple): coordinate at which the field is sampled.
 
@@ -153,7 +153,7 @@ class OOMMFField(object):
              from oommffield import OOMMFField
              field = OOMMFField((0, 0, 0), (10, 10, 10), (1, 1, 1),
                                 value=(1, 0, -5), name='fdfield')
-             
+
              c = (5.5, 0.5, 3.5)
              print field(c)
 
@@ -193,7 +193,7 @@ class OOMMFField(object):
 
              from oommffield import OOMMFField
              field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
-             
+
              print field.random_coord()
 
         """
