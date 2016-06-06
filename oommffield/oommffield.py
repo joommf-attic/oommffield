@@ -171,8 +171,7 @@ class OOMMFField(object):
 
              from oommffield import OOMMFField
              field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
-             
-             c = (2, 2, 2)
+
              print field.domain_centre()
 
         """
@@ -183,7 +182,21 @@ class OOMMFField(object):
         return c
 
     def random_coord(self):
-        """Generate a random coordinate inside the sample."""
+        """Generate a random coordinate in the domain.
+
+       Returns:
+          A random domain coordinate.
+
+        Example:
+
+        .. code-block::
+
+             from oommffield import OOMMFField
+             field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+             
+             print field.random_coord()
+
+        """
         c = (self.cmin[0] + random.random()*self.l[0],
              self.cmin[1] + random.random()*self.l[1],
              self.cmin[2] + random.random()*self.l[2])
