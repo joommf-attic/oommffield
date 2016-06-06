@@ -74,7 +74,8 @@ class OOMMFField(object):
           f (np.ndarray): A field value four-dimensional numpy array.
 
         Example:
-          .. code-block::
+
+          .. code-block:: python
 
              from oommffield import OOMMFField
              cmin = (0, 0, 0)
@@ -148,31 +149,32 @@ class OOMMFField(object):
 
         Example:
 
-        .. code-block::
+        .. code-block:: python
 
-             from oommffield import OOMMFField
-             field = OOMMFField((0, 0, 0), (10, 10, 10), (1, 1, 1),
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (10, 10, 10), (1, 1, 1),
                                 value=(1, 0, -5), name='fdfield')
 
-             c = (5.5, 0.5, 3.5)
-             print field(c)
+           c = (5.5, 0.5, 3.5)
+           print field(c)
 
         """
         return self.sample(c)
 
     def domain_centre(self):
-        """Compute and return the domain centre coordinate
+        """Compute and return the domain centre coordinate.
+
         Returns:
           A domain centre coordinate tuple.
 
         Example:
 
-        .. code-block::
+        .. code-block:: python
 
-             from oommffield import OOMMFField
-             field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
 
-             print field.domain_centre()
+           print field.domain_centre()
 
         """
         c = (self.cmin[0] + 0.5*self.l[0],
@@ -184,17 +186,17 @@ class OOMMFField(object):
     def random_coord(self):
         """Generate a random coordinate in the domain.
 
-       Returns:
+        Returns:
           A random domain coordinate.
 
         Example:
 
-        .. code-block::
+        .. code-block:: python
 
-             from oommffield import OOMMFField
-             field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
 
-             print field.random_coord()
+           print field.random_coord()
 
         """
         c = (self.cmin[0] + random.random()*self.l[0],
