@@ -156,11 +156,26 @@ class OOMMFField(object):
              
              c = (5.5, 0.5, 3.5)
              print field(c)
+
         """
         return self.sample(c)
 
     def domain_centre(self):
-        """Compute the sample atlas centre coodinate."""
+        """Compute and return the domain centre coordinate
+        Returns:
+          A domain centre coordinate tuple.
+
+        Example:
+
+        .. code-block::
+
+             from oommffield import OOMMFField
+             field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+             
+             c = (2, 2, 2)
+             print field.domain_centre()
+
+        """
         c = (self.cmin[0] + 0.5*self.l[0],
              self.cmin[1] + 0.5*self.l[1],
              self.cmin[2] + 0.5*self.l[2])
