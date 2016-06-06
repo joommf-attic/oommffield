@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 
 class OOMMFField(object):
-    def __init__(self, cmin, cmax, d, dim=3, value=None, name=None):
+    def __init__(self, cmin, cmax, d, dim=3, value=None, name='unnamed'):
         """Class for analysing, manipulating, and writing finite diffrenece fields.
 
         This class provides the functionality for:
@@ -39,9 +39,9 @@ class OOMMFField(object):
           dim (Optional[int]): The value dimensionality. Defaults to 3.
             If dim=1, a scalar field is initialised. On the other hand, if
             dim=3, a three dimensional vector field is created.
-          value (Optional): value of a finite difference field. Defaults to None.
-            For the possible types of value argument, refer to set method. If no
-            value argument is provided, a zero field is initialised.
+          value (Optional): Finite difference field values. Defaults to None.
+            For the possible types of value argument, refer to set method.
+            If no value argument is provided, a zero field is initialised.
           name (Optional[str]): Field name.
 
         Attributes:
@@ -63,8 +63,8 @@ class OOMMFField(object):
 
             lz = zmax - zmin
 
-          n (tuple): The number of cells in x, y, and z dimensions (nx, ny, nz):
-          
+          n (tuple): The number of cells in all three dimensions (nx, ny, nz):
+
             nx = lx/dx
 
             ny = ly/dy
@@ -72,7 +72,7 @@ class OOMMFField(object):
             nz = lz/dz
 
           f (np.ndarray): A field value four-dimensional numpy array.
- 
+
         Example:
           .. code-block:: python
 
@@ -82,64 +82,58 @@ class OOMMFField(object):
              d = (1, 0.5, 0.1)
              value = (0.5, -0.3, 6)
              field = OOMMFField(cmin, cmax, d, value=value, name='fdfield')
-          
-        """
 
+        """
+        # Raise exceptions if invalid arguments are provided.
         if not isinstance(cmin, tuple) or \
            not all(isinstance(i, (float, int)) for i in cmin) or \
            len(cmin) != 3:
             raise TypeError("""cmin must be a 3-element tuple of
                             int or float values.""")
-        else:
-            self.cmin = cmin
-
         if not isinstance(cmax, tuple) or \
            not all(isinstance(i, (float, int)) for i in cmax) or \
            len(cmax) != 3:
             raise TypeError("""cmax must be a 3-element tuple of
                             int or float values.""")
-        else:
-            self.cmax = cmax
-
         if not isinstance(d, tuple) or \
            any(i <= 0 for i in d) or \
            len(d) != 3:
             raise TypeError("""d must be a 3-element tuple of positive
                             int or float values.""")
-        else:
-            self.d = d
+        if not isinstance(dim, int) or \
+           dim <= 0:
+            raise TypeError("""dim must be a positive int value.""")
+        if not isinstance(name, str):
+            raise TypeError("""name must be a string.""")
 
-        if not isinstance(dim, int) or dim <= 0:
-            raise TypeError("""dim must be a positive int or float values.""")
-        else:
-            self.dim = dim
-
-        if name is not None and not isinstance(name, str):
-            raise TypeError('name is not a str.')
-        else:
-            self.name = name
+        # Copy arguments to attributes.
+        self.cmin = cmin
+        self.cmax = cmax
+        self.d = d
+        self.dim = dim
+        self.name = name
 
         # Compute domain edge lengths.
         self.l = (self.cmax[0]-self.cmin[0],
                   self.cmax[1]-self.cmin[1],
                   self.cmax[2]-self.cmin[2])
 
-        # Compute the number of cells in x, y, and z directions.
+        # Check if domain edge lengths are multiples of d.
         tol = 1e-12
         if self.d[0] - tol > self.l[0] % self.d[0] > tol or \
            self.d[1] - tol > self.l[1] % self.d[1] > tol or \
            self.d[2] - tol > self.l[2] % self.d[2] > tol:
             raise ValueError('Domain is not a multiple of {}.'.format(self.d))
 
-        else:
-            self.n = (int(round(self.l[0]/self.d[0])),
-                      int(round(self.l[1]/self.d[1])),
-                      int(round(self.l[2]/self.d[2])))
+        # Compute the number of cells in x, y, and z directions.
+        self.n = (int(round(self.l[0]/self.d[0])),
+                  int(round(self.l[1]/self.d[1])),
+                  int(round(self.l[2]/self.d[2])))
 
         # Create an empty 3d vector field.
         self.f = np.zeros([self.n[0], self.n[1], self.n[2], dim])
 
-        # Set the OOMMFField value if specified.
+        # Set the OOMMFField value if not None.
         if value is not None:
             self.set(value)
 
@@ -435,7 +429,7 @@ class OOMMFField(object):
         oommf_file.close()
 
 
-def read_oommf_file(filename, name=None):
+def read_oommf_file(filename, name='unnamed'):
     """Read the OOMMF file and convert it to OOMMFField object."""
     # Open and read the file.
     f = open(filename, 'r')
