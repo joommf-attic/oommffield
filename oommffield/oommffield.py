@@ -1,27 +1,116 @@
+"""A Python package for analysing and manipulating OOMMF vector fields.
+
+This module is a Python package that provides:
+
+- Opening OOMMF vector field files (.omf and .ohf)
+- Analysing vector fields, such as sampling, averaging, plotting, etc.
+- Saving arbitrary vector fields to OOMMF vector field files.
+
+oommffield is a member of JOOMMF project - a part of OpenDreamKit
+Horizon 2020 European Research Infrastructure project
+
+"""
+
 import random
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 class OOMMFField(object):
-    def __init__(self, cmin, cmax, d, dim=1, value=None, name=None):
-        if not isinstance(cmin, tuple):
-            raise TypeError('cmin is not a tuple.')
+    def __init__(self, cmin, cmax, d, dim=3, value=None, name=None):
+        """Class for analysing, manipulating, and writing finite diffrenece fields.
+
+        This class provides the functionality for:
+          - Creating FD vector and scalar fields.
+          - Plotting FD fields.
+          - Computing common values characterising FD fields.
+          - Writing OOMMF vector field files (.omf/.ohf)
+
+        Args:
+          cmin (tuple): The minimum coordinate range.
+            cmin tuple is of length 3 and defines the minimum x, y, and z
+            coordinates of the finite difference domain: (xmin, ymin, zmax)
+          cmax (tuple): The maximum coordinate range.
+            cmax tuple is of length 3 and defines the maximum x, y, and z
+            coordinates of the finite difference domain: (xmin, ymin, zmax)
+          d (tuple): discretisation
+            d is a discretisation tuple of length 3 and defines the
+            discretisation steps in x, y, and z directions: (dx, dy, dz)
+          dim (Optional[int]): The value dimensionality. Defaults to 3.
+            If dim=1, a scalar field is initialised. On the other hand, if
+            dim=3, a three dimensional vector field is created.
+          value (Optional): value of a finite difference field. Defaults to None.
+            For the possible types of value argument, refer to set method. If no
+            value argument is provided, a zero field is initialised.
+          name (Optional[str]): Field name.
+
+        Attributes:
+          cmin (tuple): The minimum coordinate range. Defined in Args.
+
+          cmax (tuple): The maximum coordinate range. Defined in Args.
+
+          d (tuple): Discretisation. Defined in Args.
+
+          dim (int): The value dimensionality. Defined in Args.
+
+          name (str): Field name.
+
+          l (tuple): length of domain x, y, and z edges (lx, ly, lz):
+
+            lx = xmax - xmin
+
+            ly = ymax - ymin
+
+            lz = zmax - zmin
+
+          n (tuple): The number of cells in x, y, and z dimensions (nx, ny, nz):
+          
+            nx = lx/dx
+
+            ny = ly/dy
+
+            nz = lz/dz
+
+          f (np.ndarray): A field value four-dimensional numpy array.
+ 
+        Example:
+          .. code-block:: python
+
+             from oommffield import OOMMFField
+             cmin = (0, 0, 0)
+             cmax = (10, 5, 3)
+             d = (1, 0.5, 0.1)
+             value = (0.5, -0.3, 6)
+             field = OOMMFField(cmin, cmax, d, value=value, name='fdfield')
+          
+        """
+
+        if not isinstance(cmin, tuple) or \
+           not all(isinstance(i, (float, int)) for i in cmin) or \
+           len(cmin) != 3:
+            raise TypeError("""cmin must be a 3-element tuple of
+                            int or float values.""")
         else:
             self.cmin = cmin
 
-        if not isinstance(cmax, tuple):
-            raise TypeError('cmax is not a tuple.')
+        if not isinstance(cmax, tuple) or \
+           not all(isinstance(i, (float, int)) for i in cmax) or \
+           len(cmax) != 3:
+            raise TypeError("""cmax must be a 3-element tuple of
+                            int or float values.""")
         else:
             self.cmax = cmax
 
-        if not isinstance(d, tuple) or d[0] <= 0 or d[1] <= 0 or d[2] <= 0:
-            raise TypeError('d is not a tuple of positive floats.')
+        if not isinstance(d, tuple) or \
+           any(i <= 0 for i in d) or \
+           len(d) != 3:
+            raise TypeError("""d must be a 3-element tuple of positive
+                            int or float values.""")
         else:
             self.d = d
 
         if not isinstance(dim, int) or dim <= 0:
-            raise TypeError('dim is not an int.')
+            raise TypeError("""dim must be a positive int or float values.""")
         else:
             self.dim = dim
 
@@ -59,7 +148,7 @@ class OOMMFField(object):
         return self.sample(c)
 
     def domain_centre(self):
-        """Compute the sample centre coodinate."""
+        """Compute the sample atlas centre coodinate."""
         c = (self.cmin[0] + 0.5*self.l[0],
              self.cmin[1] + 0.5*self.l[1],
              self.cmin[2] + 0.5*self.l[2])
