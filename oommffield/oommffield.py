@@ -74,7 +74,7 @@ class OOMMFField(object):
           f (np.ndarray): A field value four-dimensional numpy array.
 
         Example:
-          .. code-block:: python
+          .. code-block::
 
              from oommffield import OOMMFField
              cmin = (0, 0, 0)
@@ -138,7 +138,25 @@ class OOMMFField(object):
             self.set(value)
 
     def __call__(self, c):
-        """Sample the field at coordinate c."""
+        """Sample the field at coordinate c.
+        
+        Args:
+          c (tuple): coordinate at which the field is sampled.
+
+        Returns:
+          Field value in cell containing coordinate c.
+
+        Example:
+
+        .. code-block::
+
+             from oommffield import OOMMFField
+             field = OOMMFField((0, 0, 0), (10, 10, 10), (1, 1, 1),
+                                value=(1, 0, -5), name='fdfield')
+             
+             c = (5.5, 0.5, 3.5)
+             print field(c)
+        """
         return self.sample(c)
 
     def domain_centre(self):
