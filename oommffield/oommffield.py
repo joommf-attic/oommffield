@@ -206,7 +206,32 @@ class OOMMFField(object):
         return c
 
     def index2coord(self, i):
-        """Convert the index to coordinate."""
+        """Convert the cell index to its coordinate.
+
+        The finite difference domain is disretised in x, y, and z directions
+        in steps dx, dy, and dz steps, respectively. Accordingly, there are
+        nx, ny, and nz discretisation steps. This method converts the cell index
+        (ix, iy, iz) to the cell's centre coordinate.
+
+        This method raises ValueError if the index is out of range.
+
+        Args:
+          i (tuple): A length 3 tuple of integers (ix, iy, iz)
+
+        Returns:
+          A length 3 tuple of x, y, and z coodinates.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           i = (2, 2, 1)
+           print field.index2coord(i)
+
+        """
         if i[0] < 0 or i[0] > self.n[0]-1 or \
            i[1] < 0 or i[1] > self.n[1]-1 or \
            i[2] < 0 or i[2] > self.n[2]-1:
@@ -220,7 +245,32 @@ class OOMMFField(object):
         return c
 
     def coord2index(self, c):
-        """Convert the coordinate to index."""
+        """Convert the cell's coordinate to its index.
+
+        This method is an inverse function of index2coord method.
+        (For details on index, please refer to the index2coord method.)
+        More precisely, this method return the index of a cell containing
+        the coordinate c.
+
+        This method raises ValueError if the index is out of range.
+
+        Args:
+          c (tuple): A length 3 tuple of integers/floats (cx, cy, cz)
+
+        Returns:
+          A length 3 tuple of cell's indices (ix, iy, iz).
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           c = (2.3, 2.1, 0.8)
+           print field.coord2index(i)
+
+        """
         if c[0] < self.cmin[0] or c[0] > self.cmax[0] or \
            c[1] < self.cmin[1] or c[1] > self.cmax[1] or \
            c[2] < self.cmin[2] or c[2] > self.cmax[2]:
@@ -241,16 +291,94 @@ class OOMMFField(object):
         return tuple(i)
 
     def nearestcellcoord(self, c):
-        """Find the cell coordinate nearest to c."""
+        """Find the cell coordinate nearest to c.
+        
+        This method computes the cell's centre coordinate containing
+        the coodinate c.
+
+        Args:
+          c (tuple): A length 3 tuple of integers/floats.
+
+        Returns:
+          A length 3 tuple of integers/floats.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           c = (2.3, 2.1, 0.8)
+           print field.nearestcellcoord(i)
+
+        """
         return self.index2coord(self.coord2index(c))
 
     def sample(self, c):
-        """Sample the OOMMFField at coordinate c."""
+        """Sample the OOMMFField at coordinate c.
+
+        Compute the vector field value at the domain's coordinate c.
+        Due to the finite difference discretisation, the value this method
+        returns is the same for any coorinate in the sell.
+
+        Args:
+          c (tuple): A A length 3 tuple of integers/floats.
+
+        Returns:
+          The field value at coodinate c.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           c = (2.3, 2.1, 0.8)
+           print field.sample(i)
+
+        """
         i = self.coord2index(c)
         return self.f[i[0], i[1], i[2]]
 
     def set(self, value, normalise=False):
-        """Set the OOMMFField value."""
+        """Set the field value.
+
+        This method sets the field values at all finite difference
+        domain cells. If 
+
+        Args:
+          value: This argument can be an integer, float, tuple, list,
+            np.ndarray, or Python function.
+
+          normalise (bool): If True, the vector field value is
+            normalised to 1.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           # Set the field value with int/float
+           value = 2.1
+           field.set(value)
+
+           # Set the field value with list/tuple/np.ndarray
+           value = [1, -0.2, 3.5]
+           field.set(value, normalise=True)
+
+           # Set the field value using Python function.
+           def m_init(pos):
+               x, y, z = pos
+
+               return (x+1, x**2+y, -z)
+
+           field.set(m_init)
+        
+        """
         # value is an int or float.
         # All components of the OOMMFField are set to value.
         if isinstance(value, (int, float)):
@@ -278,11 +406,44 @@ class OOMMFField(object):
             self.normalise()
 
     def set_at_index(self, i, value):
-        """Set the value of OOMMFField at index i."""
+        """Set the field value at index i.
+
+        This method sets the field value at a single index i.
+
+        Args:
+          i (tuple): A length 3 tuple of integers (ix, iy, iz)
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           i = (2, 2, 1)
+           value = 5
+           print field.set_at_index(i, value)
+
+        """
         self.f[i[0], i[1], i[2], :] = value
 
     def average(self):
-        """Compute the OOMMFField average"""
+        """Compute the finite difference field average.
+
+        Returns:
+          Finite difference field average.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           field.set((1, 0, 5))
+           print field.average()
+        
+        """
         # Scalar field.
         if self.dim == 1:
             return np.mean(self.f)
@@ -296,8 +457,34 @@ class OOMMFField(object):
         return average
 
     def slice_field(self, axis, point):
-        """Return the slice of OOMMFField, perpendicular to
-        axis at coordinate point."""
+        """Returns the slice of a finite difference field.
+
+        This method returns the values of a finite difference field
+        on the plane perpendicular to the axis at point.
+
+        Args:
+          axis (str): An axis to which the sampling plane is perpendicular to.
+          point (int/float): The coorindta eon axis at which the field is sampled.
+
+        Returns:
+          A 4 element tuple containing:
+            
+            - Axis 1 coodinates
+            - Axis 2 coodinates
+            - np.ndarray of field values on the plane
+            - coordinate system details
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           field.set((1, 0, 5))
+           print field.slice_field('z', 0.5)
+
+        """
         if axis == 'x':
             slice_num = 0
             axes = (1, 2)
