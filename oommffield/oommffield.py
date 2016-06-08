@@ -642,7 +642,25 @@ class OOMMFField(object):
                 self.f[:, :, :, j] = norm * self.f[:, :, :, j]/f_norm
 
     def write_oommf_file(self, filename):
-        """Write the OOMMFField to the OOMMF (omf, ohf) file."""
+        """Write the FD field to the OOMMF (omf, ohf) file.
+
+        This method writes all necessary data to the omf or ohf file,
+        so that it can be read by OOMMF.
+
+        Args:
+          filename (str): filename including extension
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           field.set((1, 0, 5))
+           print field.write_oommf_file('fdfield.omf')
+
+        """
         oommf_file = open(filename, 'w')
 
         # Define header lines.
