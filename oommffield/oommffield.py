@@ -535,8 +535,31 @@ class OOMMFField(object):
         return axis1_coords, axis2_coords, field_slice, coord_system
 
     def plot_slice(self, axis, point, xsize=10, axes=True, grid=True):
-        """Plot the OOMMFField slice, perpendicular to axis,
-        at coordinate point."""
+        """Plot the field slice.
+
+        This method plots the field slice that is obtained
+        using slice_field method.
+
+        Args:
+          axis (str): An axis to which the sampling plane is perpendicular to.
+          point (int/float): The coorindta eon axis at which the field is sampled.
+          xsize (Optional[int/float]): The horizonatl size of a plot.
+          grid (Optional[bool]): If True, grid is shown in the plot.
+
+        Returns:
+          matplotlib figure.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           field.set((1, 0, 5))
+           print field.plot_slice('z', 0.5)
+
+        """
         a1, a2, field_slice, coord_system = self.slice_field(axis, point)
 
         # Vector field.
@@ -582,7 +605,25 @@ class OOMMFField(object):
         return plot_matrix
 
     def normalise(self, norm=1):
-        """Normalise the OOMMFField to norm."""
+        """Normalise the finite difference vector field.
+
+        If the finite difference field is multidimensional (vector),
+        its value is normalised so that at all points.
+
+        Args:
+          norm (int/float): Norm value at all finite difference cells.
+
+        Example:
+
+        .. code-block:: python
+
+           from oommffield import OOMMFField
+           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+
+           field.set((1, 0, 5))
+           print field.normalise(5)
+        
+        """
         # Scalar field.
         if self.dim == 1:
             raise NotImplementedError("""Normalisation of scalar
@@ -665,7 +706,24 @@ class OOMMFField(object):
 
 
 def read_oommf_file(filename, name='unnamed'):
-    """Read the OOMMF file and convert it to OOMMFField object."""
+    """Read the OOMMF file and create an OOMMFField object.
+
+    Args:
+      filename (str): OOMMF file name
+      name (str): name of the OOMMFField object
+
+    Return:
+      OOMMFField object.
+
+    Example:
+
+        .. code-block:: python
+
+           from oommffield import read_oommf_field
+           oommf_filename = 'vector_field.omf'
+           field = read_oommf_field(oommf_filename, name='magnetisation')
+
+    """
     # Open and read the file.
     f = open(filename, 'r')
     lines = f.readlines()
