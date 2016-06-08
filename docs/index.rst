@@ -28,6 +28,10 @@ Contents:
    :maxdepth: 2
 
    oommffield
+   read_oommf_file
+   ipynb/creating_fd_field
+   ipynb/setting_fd_field
+   ipynb/plotting_field
 
 
 Indices and tables
