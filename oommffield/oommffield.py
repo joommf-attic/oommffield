@@ -210,8 +210,8 @@ class OOMMFField(object):
 
         The finite difference domain is disretised in x, y, and z directions
         in steps dx, dy, and dz steps, respectively. Accordingly, there are
-        nx, ny, and nz discretisation steps. This method converts the cell index
-        (ix, iy, iz) to the cell's centre coordinate.
+        nx, ny, and nz discretisation steps. This method converts the cell
+        index (ix, iy, iz) to the cell's centre coordinate.
 
         This method raises ValueError if the index is out of range.
 
@@ -292,7 +292,7 @@ class OOMMFField(object):
 
     def nearestcellcoord(self, c):
         """Find the cell coordinate nearest to c.
-        
+
         This method computes the cell's centre coordinate containing
         the coodinate c.
 
@@ -346,7 +346,7 @@ class OOMMFField(object):
         """Set the field value.
 
         This method sets the field values at all finite difference
-        domain cells. If 
+        domain cells.
 
         Args:
           value: This argument can be an integer, float, tuple, list,
@@ -377,7 +377,7 @@ class OOMMFField(object):
                return (x+1, x**2+y, -z)
 
            field.set(m_init)
-        
+
         """
         # value is an int or float.
         # All components of the OOMMFField are set to value.
@@ -442,7 +442,7 @@ class OOMMFField(object):
 
            field.set((1, 0, 5))
            print field.average()
-        
+
         """
         # Scalar field.
         if self.dim == 1:
@@ -464,11 +464,12 @@ class OOMMFField(object):
 
         Args:
           axis (str): An axis to which the sampling plane is perpendicular to.
-          point (int/float): The coorindta eon axis at which the field is sampled.
+          point (int/float): The coorindta eon axis at which the field is
+            sampled.
 
         Returns:
           A 4 element tuple containing:
-            
+
             - Axis 1 coodinates
             - Axis 2 coodinates
             - np.ndarray of field values on the plane
@@ -542,7 +543,8 @@ class OOMMFField(object):
 
         Args:
           axis (str): An axis to which the sampling plane is perpendicular to.
-          point (int/float): The coorindta eon axis at which the field is sampled.
+          point (int/float): The coorindta eon axis at which the field
+            is sampled.
           xsize (Optional[int/float]): The horizonatl size of a plot.
           grid (Optional[bool]): If True, grid is shown in the plot.
 
@@ -622,7 +624,7 @@ class OOMMFField(object):
 
            field.set((1, 0, 5))
            print field.normalise(5)
-        
+
         """
         # Scalar field.
         if self.dim == 1:
