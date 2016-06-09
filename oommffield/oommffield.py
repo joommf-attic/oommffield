@@ -779,13 +779,13 @@ def read_oommf_file(filename, name='unnamed'):
 
     counter = 0
     for iz in range(n[2]):
-            for iy in range(n[1]):
-                    for ix in range(n[0]):
-                        i = (ix, iy, iz)
-                        line_data = lines[data_first_line+counter]
-                        value = [float(vi) for vi in line_data.split()]
-                        field.set_at_index(i, value)
+        for iy in range(n[1]):
+            for ix in range(n[0]):
+                i = (ix, iy, iz)
+                line_data = lines[data_first_line+counter]
+                value = [float(vi) for vi in line_data.split()]
+                field.set_at_index(i, value)
 
-                        counter += 1
+                counter += 1
 
     return field
