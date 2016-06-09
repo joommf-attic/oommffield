@@ -10,7 +10,19 @@
   :target: http://oommffield.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
 
-A Python package for analysing and manipulating
-OOMMF vector field files (omf, ohf).
+This module is a Python package that provides:
+
+- Opening OOMMF vector field files (.omf and .ohf)
+- Analysing vector fields, such as sampling, averaging, plotting, etc.
+- Saving arbitrary vector fields to OOMMF vector field files.
+
+oommffield is a member of JOOMMF_ project - a part of OpenDreamKit_
+Horizon 2020 European Research Infrastructure project
+
+.. _JOOMMF:
+  http://joommf.github.io
+ 
+.. _OpenDreamKit:
+  http://opendreamkit.org/
 
 Authors: Marijan Beg, Ryan Pepper, Hans Fangohr
