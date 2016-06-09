@@ -412,6 +412,7 @@ class TestOOMMFField(object):
         for f in self.vector_fs:
             f.set(value, normalise=True)
             point = f.domain_centre()['xyz'.find('y')]
+            fig = f.plot_slice('y', point, axes=True)
             fig = f.plot_slice('y', point, axes=False)
 
     def test_plot_slice_vector_field_exception(self):
