@@ -14,7 +14,7 @@ install: pip install codecov pytest-cov matplotlib jupyter git+https://github.co
 script:
   - py.test --cov=oommffield --cov-config .coveragerc
   - py.test --nbval docs/ipynb/*.ipynb
-  - py.test --doctest-modules oomffield/*.py
+  - py.test --doctest-modules oommffield/*.py
 after_success:
   codecov
 notifications:
