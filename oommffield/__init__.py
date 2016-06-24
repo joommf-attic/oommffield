@@ -1,1 +1,1 @@
-from .oommffield import OOMMFField, read_oommf_file
+from .oommffield import Field, read_oommf_file

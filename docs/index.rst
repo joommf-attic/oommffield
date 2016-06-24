@@ -27,12 +27,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   oommffield
+   field
    read_oommf_file
-   ipynb/creating_fd_field
-   ipynb/setting_fd_field
-   ipynb/analysing_field
-   ipynb/plotting_field
    ipynb/saving_reading_oommf_files
 
 
