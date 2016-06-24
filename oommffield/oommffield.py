@@ -16,6 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import finitedifferencefield
 
+
 class Field(finitedifferencefield.Field):
 
     def write_oommf_file(self, filename):
@@ -31,11 +32,11 @@ class Field(finitedifferencefield.Field):
 
         .. code-block:: python
 
-           from oommffield import Field
-           field = OOMMFField((0, 0, 0), (5, 4, 3), (1, 1, 1))
+          >>> from oommffield import Field
+          >>> field = Field((0, 0, 0), (5, 4, 3), (1, 1, 1))
 
-           field.set((1, 0, 5))
-           print field.write_oommf_file('fdfield.omf')
+          >>> field.set((1, 0, 5))
+          >>> field.write_oommf_file('fdfield.omf')
 
         """
         oommf_file = open(filename, 'w')
@@ -114,9 +115,9 @@ def read_oommf_file(filename, name='unnamed'):
 
         .. code-block:: python
 
-           from oommffield import read_oommf_field
-           oommf_filename = 'vector_field.omf'
-           field = read_oommf_field(oommf_filename, name='magnetisation')
+          from oommffield import read_oommf_file
+          oommf_filename = 'vector_field.omf'
+          field = read_oommf_file(oommf_filename, name='magnetisation')
 
     """
     # Open and read the file.
