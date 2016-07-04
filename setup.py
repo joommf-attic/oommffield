@@ -5,7 +5,7 @@ with open('README.rst') as f:
 
 setup(
     name='oommffield',
-    version='0.1',
+    version='0.2',
     description='A Python package for analysing and manipulating OOMMF vector field files',
     long_description=readme,
     author='Computational Modelling Group',
