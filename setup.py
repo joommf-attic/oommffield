@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 
 with open('README.rst') as f:
     readme = f.read()
@@ -13,6 +13,9 @@ setup(
     url = 'https://github.com/joommf/oommffield',
     download_url = 'https://github.com/joommf/oommffield/tarball/0.1',
     packages=['oommffield', 'oommffield.tests'],
+    install_requires=[
+        'finitedifferencefield',
+    ],
     classifiers=[
         'License :: OSI Approved :: BSD License',
         'Programming Language :: Python :: 2.7',
