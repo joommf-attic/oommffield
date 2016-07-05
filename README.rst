@@ -10,6 +10,9 @@
   :target: http://oommffield.readthedocs.io/en/latest/?badge=latest
   :alt: Documentation Status
 
+.. image:: https://badge.fury.io/py/oommffield.svg
+  :target: https://badge.fury.io/py/oommffield
+	     
 This module is a Python package that provides:
 
 - Opening OOMMF vector field files (.omf and .ohf)
