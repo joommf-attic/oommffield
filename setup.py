@@ -11,7 +11,7 @@ setup(
     author='Computational Modelling Group',
     author_email='fangohr@soton.ac.uk',
     url = 'https://github.com/joommf/oommffield',
-    download_url = 'https://github.com/joommf/oommffield/tarball/0.1',
+    download_url = 'https://github.com/joommf/oommffield/tarball/0.3',
     packages=['oommffield', 'oommffield.tests'],
     install_requires=[
         'finitedifferencefield',
