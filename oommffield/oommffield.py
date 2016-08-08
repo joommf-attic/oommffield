@@ -15,6 +15,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 import finitedifferencefield
+import struct
 
 
 class Field(finitedifferencefield.Field):
@@ -102,6 +103,17 @@ class Field(finitedifferencefield.Field):
 
 
 def read_oommf_file(filename, name='unnamed'):
+    try:
+        f = open(filename)
+        f.readlines()
+        f.close()
+        read_oommf_file_text(filename, name)
+
+    except UnicodeDecodeError:
+        read_oommf_file_binary(filename, name)
+
+
+def read_oommf_file_text(filename, name='unnamed'):
     """Read the OOMMF file and create an Field object.
 
     Args:
@@ -163,5 +175,91 @@ def read_oommf_file(filename, name='unnamed'):
                 field.set_at_index(i, value)
 
                 counter += 1
+
+    return field
+
+
+def read_oommf_file_binary(filename, name='unnamed'):
+    """Read the OOMMF file and create an Field object.
+
+    Args:
+      filename (str): OOMMF file name
+      name (str): name of the Field object
+
+    Return:
+      Field object.
+
+    Example:
+
+        .. code-block:: python
+
+          from oommffield import read_oommf_file
+          oommf_filename = 'vector_field.omf'
+          field = read_oommf_file(oommf_filename, name='magnetisation')
+
+    """
+    # Open and read the file.
+    with open(filename, 'rb') as f:
+        file = f.read()
+        lines = file.split(b'\n')
+
+    # Load metadata.
+    dic = {'xmin': None, 'ymin': None, 'zmin': None,
+           'xmax': None, 'ymax': None, 'zmax': None,
+           'xstepsize': None, 'ystepsize': None, 'zstepsize': None,
+           'xbase': None, 'ybase': None, 'zbase': None,
+           'xnodes': None, 'ynodes': None, 'znodes': None,
+           'valuedim': None}
+
+    for line in lines[0:50]:
+        for key in dic.keys():
+            if line.find(bytes(key, 'utf-8')) != -1:
+                dic[key] = float(line.split()[2])
+
+    cmin = (dic['xmin'], dic['ymin'], dic['zmin'])
+    cmax = (dic['xmax'], dic['ymax'], dic['zmax'])
+    d = (dic['xstepsize'], dic['ystepsize'], dic['zstepsize'])
+    cbase = (dic['xbase'], dic['ybase'], dic['zbase'])
+    n = (int(round(dic['xnodes'])),
+         int(round(dic['ynodes'])),
+         int(round(dic['znodes'])))
+    dim = int(dic['valuedim'])
+    field = Field(cmin, cmax, d, dim, name=name)
+
+    binary_header = b'# Begin: Data Binary '
+    data_start = file.find(binary_header)
+    header = file[data_start:data_start + len(binary_header) + 1]
+    if b'8' in header:
+        bytesize = 8
+    elif b'4' in header:
+        bytesize = 4
+
+    data_start += len(b'# Begin: Data Binary 8\n')
+    data_end = file.find(b'# End: Data Binary ')
+    if bytesize == 4:
+        listdata = list(struct.iter_unpack('@f', file[data_start:data_end]))
+        try:
+            assert listdata[0] == 1234567.0
+        except:
+            raise AssertionError('Something has gone wrong'
+                                 ' with reading Binary Data')
+    elif bytesize == 8:
+        listdata = list(struct.iter_unpack('@d', file[data_start:data_end]))
+        try:
+            assert listdata[0][0] == 123456789012345.0
+        except:
+            raise AssertionError('Something has gone wrong'
+                                 ' with reading Binary Data')
+
+    counter = 1
+    for iz in range(n[2]):
+        for iy in range(n[1]):
+            for ix in range(n[0]):
+                i = (ix, iy, iz)
+                value = (listdata[counter][0],
+                         listdata[counter+1][0],
+                         listdata[counter+2][0])
+                field.set_at_index(i, value)
+                counter += 3
 
     return field
