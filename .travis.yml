@@ -1,7 +1,7 @@
 language: python
 python:
   - "3.5"
-  - "3.4"
+
 # Configure a headless display to test plot generation
 before_script:
 - "export DISPLAY=:99.0"
