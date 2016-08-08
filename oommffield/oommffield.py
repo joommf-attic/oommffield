@@ -107,10 +107,10 @@ def read_oommf_file(filename, name='unnamed'):
         f = open(filename)
         f.readlines()
         f.close()
-        read_oommf_file_text(filename, name)
+        return read_oommf_file_text(filename, name)
 
     except UnicodeDecodeError:
-        read_oommf_file_binary(filename, name)
+        return read_oommf_file_binary(filename, name)
 
 
 def read_oommf_file_text(filename, name='unnamed'):
