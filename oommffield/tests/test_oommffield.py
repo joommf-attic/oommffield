@@ -47,3 +47,21 @@ class TestField(object):
             assert np.all(abs(f.f - f_loaded.f) < tol)
 
             os.system('rm {}'.format(filename))
+
+
+    def test_write_read_oommf_file_binary(self):
+        tol = 12
+        filename = 'test_write_oommf_file_binary.omf'
+        value = (1e-3 + np.pi, -5, 6)
+        for f in self.vector_fs:
+            f.set(value)
+            f.write_oommf_file(filename, 'binary')
+
+            f_loaded = read_oommf_file(filename)
+            np.testing.assert_almost_equal(f.cmin, f_loaded.cmin)
+            np.testing.assert_almost_equal(f.cmin, f_loaded.cmin)
+            np.testing.assert_almost_equal(f.cmax, f_loaded.cmax)
+            np.testing.assert_almost_equal(f.d, f_loaded.d)
+            np.testing.assert_almost_equal(f.f, f_loaded.f, decimal = tol)
+            os.system('rm {}'.format(filename))
+

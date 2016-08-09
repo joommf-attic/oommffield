@@ -20,7 +20,7 @@ import struct
 
 class Field(finitedifferencefield.Field):
 
-    def write_oommf_file(self, filename):
+    def write_oommf_file(self, filename, datatype='text'):
         """Write the FD field to the OOMMF (omf, ohf) file.
 
         This method writes all necessary data to the omf or ohf file,
@@ -28,7 +28,7 @@ class Field(finitedifferencefield.Field):
 
         Args:
           filename (str): filename including extension
-
+          type(str): Either 'text' or 'binary'
         Example:
 
         .. code-block:: python
@@ -70,30 +70,53 @@ class Field(finitedifferencefield.Field):
                         'ymax: {}'.format(self.cmax[1]),
                         'zmax: {}'.format(self.cmax[2]),
                         'valuedim: {}'.format(self.dim),
-                        'valuelabels: Mx My Mz',
+                        'valuelabels: Magnetization_x Magnetization_y Magnetization_z',
                         'valueunits: A/m A/m A/m',
                         '',
                         'End: Header',
-                        '',
-                        'Begin: Data Text']
+                        '']
 
-        # Define footer lines.
-        footer_lines = ['# End: Data Text\n',
-                        '# End: Segment']
+        if datatype == 'binary':
+            header_lines.append('Begin: Data Binary 8')
+            footer_lines = ['End: Data Binary 8',
+                            'End: Segment']
+        if datatype == 'text':
+            header_lines.append('Begin: Data Text')
+            footer_lines = ['End: Data Text',
+                            'End: Segment']
 
         # Write header lines to OOMMF file.
         for line in header_lines:
-            oommf_file.write('# ' + line + '\n')
+            if line == '':
+                oommf_file.write('#\n')
+            else:
+                oommf_file.write('# ' + line + '\n')
+        if datatype == 'binary':
+            # Close the file and reopen with binary write
+            # appending to end of file.
+            oommf_file.close()
+            oommf_file = open(filename, 'ab')
+            # Add the 8 bit binary check value that OOMMF uses
+            packarray = [123456789012345.0]
+            # Write data lines to OOMMF file.
+            for iz in range(self.n[2]):
+                for iy in range(self.n[1]):
+                    for ix in range(self.n[0]):
+                        [packarray.append(vi) for vi in self.f[ix, iy, iz, :]]
 
-        # Write data lines to OOMMF file.
-        for iz in range(self.n[2]):
-            for iy in range(self.n[1]):
-                for ix in range(self.n[0]):
-                    v = [str(vi) for vi in self.f[ix, iy, iz, :]]
-                    for vi in v:
-                        oommf_file.write(' ' + vi)
-                    oommf_file.write('\n')
+            v_binary = struct.pack('d'*len(packarray), *packarray)
+            oommf_file.write(v_binary)
+            oommf_file.close()
+            oommf_file = open(filename, 'a')
 
+        else:
+            for iz in range(self.n[2]):
+                for iy in range(self.n[1]):
+                    for ix in range(self.n[0]):
+                        v = [str(vi) for vi in self.f[ix, iy, iz, :]]
+                        for vi in v:
+                            oommf_file.write(' ' + vi)
+                        oommf_file.write('\n')
         # Write footer lines to OOMMF file.
         for line in footer_lines:
             oommf_file.write('# ' + line + '\n')
@@ -105,10 +128,11 @@ class Field(finitedifferencefield.Field):
 def read_oommf_file(filename, name='unnamed'):
     try:
         f = open(filename)
-        f.readlines()
-        f.close()
-        return read_oommf_file_text(filename, name)
 
+        if 'Begin: Data Text' in f.read():
+            return read_oommf_file_text(filename, name)
+        else:
+            return read_oommf_file_binary(filename, name)
     except UnicodeDecodeError:
         return read_oommf_file_binary(filename, name)
 
@@ -158,11 +182,10 @@ def read_oommf_file_text(filename, name='unnamed'):
          int(round(dic['ynodes'])),
          int(round(dic['znodes'])))
     dim = int(dic['valuedim'])
-
     field = Field(cmin, cmax, d, dim, name=name)
 
     for j in range(len(lines)):
-        if lines[j].find('Begin: Data') != -1:
+        if lines[j].find('Begin: Data Text') != -1:
             data_first_line = j+1
 
     counter = 0
@@ -227,6 +250,8 @@ def read_oommf_file_binary(filename, name='unnamed'):
     field = Field(cmin, cmax, d, dim, name=name)
 
     binary_header = b'# Begin: Data Binary '
+    # Here we find the start and end points of the 
+    # binary data, in terms of byte position.
     data_start = file.find(binary_header)
     header = file[data_start:data_start + len(binary_header) + 1]
     if b'8' in header:
