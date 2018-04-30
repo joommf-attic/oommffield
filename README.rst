@@ -1,3 +1,10 @@
+# retirement notice
+
+This module `oommffield` is a package we abandoned some time ago and we are now working on https://github.com/joommf/discretisedfield which basically replaces it.
+
+# Original Readme
+
+
 .. image:: https://travis-ci.org/joommf/oommffield.svg?branch=master
   :target: https://travis-ci.org/joommf/oommffield
   :align: left
