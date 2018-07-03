@@ -1,3 +1,6 @@
+<link rel=”canonical” href=”http://github.com/joommf/discretisedfield">
+
+
 Retirement notice
 #################
 
